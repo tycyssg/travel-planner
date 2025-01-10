@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import {
   isNotEmptyErrorMessage,
   isStringErrorMessage
@@ -41,4 +41,15 @@ export class FlightDetails {
     message: isStringErrorMessage('seat', FlightDetails.name)
   })
   seat: string;
+
+  @ApiProperty({
+    description: 'Luggage Details',
+    example: 'Self-check-in luggage at counter'
+  })
+  @IsOptional()
+  @IsString({
+    always: true,
+    message: isStringErrorMessage('seat', FlightDetails.name)
+  })
+  luggage?: string;
 }

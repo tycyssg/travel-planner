@@ -1,24 +1,17 @@
 import { TicketType } from '../enums/ticket-type.enum';
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { TransitDetails } from '../types/transit-details.type';
-import {
-  IsDefined,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  ValidateNested
-} from 'class-validator';
+import { IsDefined, IsEnum, ValidateNested } from 'class-validator';
 import {
   isDefinedErrorMessage,
-  isEnumErrorMessage,
-  isNotEmptyErrorMessage,
-  isStringErrorMessage
+  isEnumErrorMessage
 } from '../../shared/error-messages-constants';
 import { TrainDetails } from './train-details';
 import { TramDetails } from './tram-details';
 import { FlightDetails } from './flight-details';
 import { BusDetails } from './bus-details';
 import { Type } from 'class-transformer';
+import { TicketDestination } from './ticket-destination';
 
 @ApiExtraModels(TrainDetails, TramDetails, FlightDetails, BusDetails)
 export class TicketDetails {
@@ -33,32 +26,19 @@ export class TicketDetails {
   type: TicketType;
 
   @ApiProperty({
-    description: 'Starting location',
-    example: 'St. Anton am Arlberg Bahnhof'
+    description:
+      'From Destination - Represents the place where the passenger departs'
   })
-  @IsNotEmpty({
-    always: true,
-    message: isNotEmptyErrorMessage('origin', TicketDetails.name)
-  })
-  @IsString({
-    always: true,
-    message: isStringErrorMessage('origin', TicketDetails.name)
-  })
-  origin: string;
+  @IsDefined({ message: isDefinedErrorMessage('from', TicketDetails.name) })
+  @Type(() => TicketDestination)
+  from: TicketDestination;
 
   @ApiProperty({
-    description: 'Destination location',
-    example: 'Innsbruck Hbf'
+    description: 'To Destination - Represent the place where passenger arrives'
   })
-  @IsNotEmpty({
-    always: true,
-    message: isNotEmptyErrorMessage('destination', TicketDetails.name)
-  })
-  @IsString({
-    always: true,
-    message: isStringErrorMessage('destination', TicketDetails.name)
-  })
-  destination: string;
+  @IsDefined({ message: isDefinedErrorMessage('to', TicketDetails.name) })
+  @Type(() => TicketDestination)
+  to: TicketDestination;
 
   @ApiProperty({
     description: 'Details of the transit',
@@ -78,7 +58,7 @@ export class TicketDetails {
         return TrainDetails;
       case TicketType.TRAM:
         return TramDetails;
-      case TicketType.AIR_PLANE:
+      case TicketType.FLIGHT:
         return FlightDetails;
       case TicketType.BUS:
         return BusDetails;

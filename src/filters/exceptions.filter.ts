@@ -76,18 +76,25 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 
   private extractValidationErrors(response: any): string[] {
-    // If response contains validation errors, process them
     if (response && Array.isArray(response.message)) {
+      // If message is an array, process each error
       return response.message.flatMap((error: any) => {
         if (typeof error === 'string') {
-          return [error]; // Handle basic string errors
+          return [error];
         }
         if (typeof error === 'object' && error.constraints) {
-          return Object.values(error.constraints); // Extract and return only the messages
+          return Object.values(error.constraints); // Extract constraint messages, properties of ValidationPipe
         }
         return []; // Ignore unexpected structures
       });
     }
-    return typeof response === 'string' ? [response] : []; // Fallback for simple or unknown structures
+
+    // If message is a string, return it as a single-element array
+    if (response && typeof response.message === 'string') {
+      return [response.message];
+    }
+
+    // If message is neither a string nor an array, return an empty array
+    return [];
   }
 }

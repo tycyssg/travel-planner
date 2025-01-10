@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TICKET_SERVICE } from './services/ticket.service.interface';
+import { TICKET_SERVICE } from './services/ticket-service.interface';
 import { TicketService } from './services/ticket.service';
 import { TicketController } from './controller/ticket-controller';
 

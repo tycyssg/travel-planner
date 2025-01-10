@@ -32,3 +32,10 @@ export function arrayNotEmptyErrorMessage(
 ): string {
   return `The array: ${property} in the object: ${objectName} is empty.`;
 }
+
+export function isArrayErrorMessage(
+  property: string,
+  objectName: string
+): string {
+  return `The property: ${property} in the object: ${objectName} is not an array.`;
+}

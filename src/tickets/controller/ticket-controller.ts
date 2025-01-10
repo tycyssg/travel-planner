@@ -3,13 +3,14 @@ import {
   ApiBadRequestResponse,
   ApiBody,
   ApiOperation,
+  ApiResponse,
   ApiTags
 } from '@nestjs/swagger';
 import { SERVICE_PREFIX } from '../../utils/utils';
 import {
   ITicketService,
   TICKET_SERVICE
-} from '../services/ticket.service.interface';
+} from '../services/ticket-service.interface';
 import { TicketRequest } from '../dto/ticket.request';
 
 @ApiTags('Tickets')
@@ -31,6 +32,10 @@ export class TicketController {
   @ApiBadRequestResponse({
     description: 'Bad request. The request body and/or parameters are malformed'
   })
+  @ApiResponse({
+    status: 200,
+    description: 'Success'
+  })
   @ApiBody({
     type: TicketRequest,
     required: true,
@@ -45,8 +50,14 @@ export class TicketController {
           tickets: [
             {
               type: 'train',
-              origin: 'St. Anton am Arlberg Bahnhof',
-              destination: 'Innsbruck Hbf',
+              from: {
+                city: 'St. Anton',
+                location: 'St. Anton am Arlberg Bahnhof'
+              },
+              to: {
+                city: 'Innsbruck',
+                location: 'Innsbruck Hbf'
+              },
               details: {
                 trainNumber: 'RJX 765',
                 platform: '3',
@@ -55,8 +66,14 @@ export class TicketController {
             },
             {
               type: 'tram',
-              origin: 'Innsbruck Hbf',
-              destination: 'Innsbruck Airport',
+              from: {
+                city: 'Innsbruck',
+                location: 'Innsbruck Hbf'
+              },
+              to: {
+                city: 'Innsbruck',
+                location: 'Innsbruck Airport'
+              },
               details: {
                 tramNumber: 'S5'
               }
@@ -66,7 +83,7 @@ export class TicketController {
       }
     }
   })
-  public async getItinerary(@Body() body: TicketRequest): Promise<any> {
+  public async getItinerary(@Body() body: TicketRequest): Promise<string[]> {
     return await this.ticketService.getItinerary(body);
   }
 }

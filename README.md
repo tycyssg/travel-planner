@@ -1,30 +1,7 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The Travel Planner Service is a RESTful API designed to help users efficiently plan and organize travel itineraries from a set of tickets provided as input. 
+The service processes various types of transportation tickets, sorts them into the correct sequence, and returns a human-readable itinerary for the user.
 
 ## Project setup
 
@@ -40,60 +17,369 @@ $ npm run start
 
 # watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## Run tests
 
 ```bash
-# unit tests
-$ npm run test
+# integration tests
+$ npm run test:integration
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
+# integration test coverage
 $ npm run test:cov
 ```
+In this project, I opted to focus exclusively on integration tests instead of writing unit tests because integration tests effectively cover all the scenarios that unit tests would address, and adding unit tests would be redundant.
 
-## Deployment
+Key Reasons for Choosing Integration Tests<br>
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+1. Comprehensive Coverage:<br>
+Integration tests ensure that all components work together as expected. They validate the system end-to-end, including the interaction between services, controllers, and data models.<br>
+Since integration tests cover the entire flow of the application, they inherently include the functionality that unit tests would individually test.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+2. Avoiding Redundancy:<br>
+Unit tests focus on testing individual methods or classes in isolation. However, integration tests already validate these methods as part of the larger system.<br>
+Writing unit tests alongside integration tests would duplicate effort without adding significant value.
+
+3. Realistic Testing Environment:<br>
+   Integration tests simulate real-world usage scenarios by interacting with the application as a whole. This ensures that all layers (e.g., controllers, services, and database) work seamlessly together.<br>
+   This approach reduces the risk of missing edge cases or issues that might arise only when components interact.
+
+## Request Sample Data
+
+<details>
+  <summary>Click to expand the sample request payload</summary>
+
+```json
+{
+   "tickets": [
+      {
+         "type": "flight",
+         "from": {
+            "city": "Berlin",
+            "location": "Berlin Brandenburg Airport"
+         },
+         "to": {
+            "city": "Amsterdam",
+            "location": "Amsterdam Schiphol Airport"
+         },
+         "details": {
+            "flightNumber": "KL1772",
+            "gate": "B12",
+            "seat": "14C",
+            "luggage": "Self-check-in luggage at counter"
+         }
+      },
+      {
+         "type": "tram",
+         "from": {
+            "city": "Amsterdam",
+            "location": "Amsterdam Central Station"
+         },
+         "to": {
+            "city": "Amsterdam",
+            "location": "Amsterdam Sloterdijk Station"
+         },
+         "details": {
+            "tramNumber": "26"
+         }
+      },
+      {
+         "type": "bus",
+         "from": {
+            "city": "Amsterdam",
+            "location": "Amsterdam Sloterdijk Bus Terminal"
+         },
+         "to": {
+            "city": "Rotterdam",
+            "location": "Rotterdam Central Station"
+         },
+         "details": {
+            "seat": "No seat assignment"
+         }
+      },
+      {
+         "type": "flight",
+         "from": {
+            "city": "Rotterdam",
+            "location": "Rotterdam The Hague Airport"
+         },
+         "to": {
+            "city": "London",
+            "location": "London Heathrow Airport"
+         },
+         "details": {
+            "flightNumber": "BA435",
+            "gate": "C5",
+            "seat": "21A",
+            "luggage": "Self-check-in luggage at counter"
+         }
+      },
+      {
+         "type": "flight",
+         "from": {
+            "city": "London",
+            "location": "London Heathrow Airport"
+         },
+         "to": {
+            "city": "New York",
+            "location": "John F. Kennedy International Airport"
+         },
+         "details": {
+            "flightNumber": "AA100",
+            "gate": "D14",
+            "seat": "8F",
+            "luggage": "Luggage will transfer automatically from the last flight"
+         }
+      },
+      {
+         "type": "train",
+         "from": {
+            "city": "New York",
+            "location": "Penn Station"
+         },
+         "to": {
+            "city": "Boston",
+            "location": "South Station"
+         },
+         "details": {
+            "trainNumber": "Acela 2150",
+            "platform": "5",
+            "seat": "10D"
+         }
+      },
+      {
+         "type": "train",
+         "from": {
+            "city": "Boston",
+            "location": "South Station"
+         },
+         "to": {
+            "city": "Portland",
+            "location": "Portland Transportation Center"
+         },
+         "details": {
+            "trainNumber": "Downeaster 684",
+            "platform": "2",
+            "seat": "15A"
+         }
+      }
+   ]
+}
+```
+</details> 
+
+## Example cURL Command
+
+<details>
+  <summary>To test the API, you can use the following cURL command:</summary>
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+curl --location 'http://localhost:3000/travel-planner/itinerary' \
+--header 'Content-Type: application/json' \
+--data '{
+  "tickets": [
+    {
+      "type": "flight",
+      "from": {
+        "city": "Bologna",
+        "location": "Bologna Guglielmo Marconi Airport"
+      },
+      "to": {
+        "city": "Paris",
+        "location": "Paris CDG Airport"
+      },
+      "details": {
+        "flightNumber": "AF1229",
+        "gate": "22",
+        "seat": "10A",
+        "luggage": "Self-check-in luggage at counter"
+      }
+    },
+    {
+      "type": "tram",
+      "from": {
+        "city": "Innsbruck",
+        "location": "Innsbruck Hbf"
+      },
+      "to": {
+        "city": "Innsbruck",
+        "location": "Innsbruck Airport"
+      },
+      "details": {
+        "tramNumber": "S5"
+      }
+    },
+    {
+      "type": "bus",
+      "from": {
+        "city": "Bologna",
+        "location": "Bologna San Ruffillo"
+      },
+      "to": {
+        "city": "Bologna",
+        "location": "Bologna Guglielmo Marconi Airport"
+      },
+      "details": {
+        "seat": "No seat assignment"
+      }
+    },
+    {
+      "type": "flight",
+      "from": {
+        "city": "Innsbruck",
+        "location": "Innsbruck Airport"
+      },
+      "to": {
+        "city": "Venice",
+        "location": "Venice Airport"
+      },
+      "details": {
+        "flightNumber": "AA904",
+        "gate": "10",
+        "seat": "18B",
+        "luggage": "Self-check-in luggage at counter"
+      }
+    },
+    {
+      "type": "flight",
+      "from": {
+        "city": "Paris",
+        "location": "Paris CDG Airport"
+      },
+      "to": {
+        "city": "Chicago",
+        "location": "Chicago O'Hare"
+      },
+      "details": {
+        "flightNumber": "AF136",
+        "gate": "32",
+        "seat": "10A",
+        "luggage": "Luggage will transfer automatically from the last flight"
+      }
+    },
+    {
+      "type": "train",
+      "from": {
+        "city": "Venice",
+        "location": "Gara Venetia Santa Lucia"
+      },
+      "to": {
+        "city": "Bologna",
+        "location": "Bologna San Ruffillo"
+      },
+      "details": {
+        "trainNumber": "ICN 35780",
+        "platform": "1",
+        "seat": "13F"
+      }
+    },
+    {
+      "type": "train",
+      "from": {
+        "city": "St. Anton",
+        "location": "St. Anton am Arlberg Bahnhof"
+      },
+      "to": {
+        "city": "Innsbruck",
+        "location": "Innsbruck Hbf"
+      },
+      "details": {
+        "trainNumber": "RJX 765",
+        "platform": "3",
+        "seat": "17C"
+      }
+    }
+  ]
+}'
 ```
+</details>
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Adding New Types of Transit to the Travel Planner Service
+To extend the Travel Planner Service with new transit types, the system is designed to be modular and adaptable. 
+Here’s a step-by-step guide to adding a new transit type with different characteristics using the existing DTOs and models.
 
-## Resources
+### Steps to Add a New Transit Type
+1. Update the TicketType Enum Add the new transit type to the TicketType enum to define its identity in the system
+```code
+export enum TicketType {
+  TRAIN = 'train',
+  TRAM = 'tram',
+  BUS = 'bus',
+  FLIGHT = 'flight',
+  BOAT = 'boat' // New transit type
+}
+```
+2. Create a New Details Class Define a new class for the specific transit type. Include relevant properties and validation rules.
+```code
+export class BoatDetails {
+  boatName: string;
+  deck?: string;
+  cabin?: string;
+}
+```
+3. Update the TransitDetails Union Type Add the new BoatDetails class to the TransitDetails type union.
+```code
+export type TransitDetails =
+  | TrainDetails
+  | TramDetails
+  | FlightDetails
+  | BusDetails
+  | BoatDetails; // New transit type details
+  ```
+4. Update the details Discriminator Modify the @Type() decorator in the details field of the TicketDetails DTO to recognize the new transit type.
+```code
+@Type((options) => {
+  const object = options?.object as { type: TicketType }; // Access the parent object
+  switch (object?.type) {
+    case TicketType.TRAIN:
+      return TrainDetails;
+    case TicketType.TRAM:
+      return TramDetails;
+    case TicketType.FLIGHT:
+      return FlightDetails;
+    case TicketType.BUS:
+      return BusDetails;
+    case TicketType.BOAT: // Handle new transit type
+      return BoatDetails;
+  }
+})
+details: TransitDetails;
+  ```
+5. Add a Type Guard Define a type guard to identify objects of the new transit type.
+```code
+export function isBoatDetails(details: TransitDetails): details is BoatDetails {
+  return 'boatName' in details;
+}
+  ```
+6. Update Sorting Logic (if applicable) Is the new transit type requires prioritization in sorting, add it to the priority map.
+```code
+export const TICKET_TYPE_PRIORITY: Record<string, number> = {
+  [TicketType.BUS]: 1,
+  [TicketType.TRAM]: 2,
+  [TicketType.TRAIN]: 3,
+  [TicketType.FLIGHT]: 4
+}
+  ```
 
-Check out a few resources that may come in handy when working with NestJS:
+## Example New Ticket with Boat Type
+```json
+{
+  "type": "boat",
+  "from": {
+    "city": "Venice",
+    "location": "Venice Port"
+  },
+  "to": {
+    "city": "Dubrovnik",
+    "location": "Dubrovnik Port"
+  },
+  "details": {
+    "boatName": "Blue Star Ferry",
+    "deck": "Upper Deck",
+    "cabin": "A12"
+  }
+}
+```
+## Author
+ [Ciprian Tudose](https://www.linkedin.com/in/ciprian-tudose/)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
